@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wuyifei.xyz | 管理后台</title>
+    <title>wuyifei.xyz | 上传后台</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -11,8 +11,8 @@
       <div class="brand">
         <div class="mark">A</div>
         <div>
-          <div class="name">文档中心后台</div>
-          <div class="sub">分类管理与文件发布</div>
+          <div class="name">文档上传后台</div>
+          <div class="sub">上传 PDF / Word / 外链</div>
         </div>
       </div>
       <nav class="nav">
@@ -21,7 +21,7 @@
     </header>
 
     <main class="shell admin-shell">
-      <section class="admin-grid">
+      <section class="admin-grid single-admin">
         <section class="side-panel">
           <div class="section-kicker">GitHub 连接</div>
           <div class="field">
@@ -45,20 +45,6 @@
           <button id="connect-btn" class="button primary full">连接仓库并读取数据</button>
           <p id="status" class="status-note">Token 只保存在当前浏览器会话，不写入页面文件。</p>
         </section>
-
-        <section class="side-panel">
-          <div class="section-kicker">新增分类</div>
-          <div class="field">
-            <label for="category-name">分类名称</label>
-            <input id="category-name" type="text" placeholder="例如：合同资料" />
-          </div>
-          <div class="field">
-            <label for="category-description">分类说明</label>
-            <textarea id="category-description" rows="3" placeholder="给访客看的分类描述"></textarea>
-          </div>
-          <button id="add-category-btn" class="button full">添加分类</button>
-          <div id="category-admin-list" class="admin-list"></div>
-        </section>
       </section>
 
       <section class="admin-grid upload-section">
@@ -68,15 +54,9 @@
             <label for="doc-title">文档标题</label>
             <input id="doc-title" type="text" placeholder="例如：2026 项目方案" />
           </div>
-          <div class="field-grid">
-            <div class="field">
-              <label for="doc-category">所属分类</label>
-              <select id="doc-category"></select>
-            </div>
-            <div class="field">
-              <label for="doc-tags">标签</label>
-              <input id="doc-tags" type="text" placeholder="用逗号分隔，例如：项目, PDF" />
-            </div>
+          <div class="field">
+            <label for="doc-tags">标签</label>
+            <input id="doc-tags" type="text" placeholder="用逗号分隔，例如：项目, PDF" />
           </div>
           <div class="field">
             <label for="doc-description">摘要</label>

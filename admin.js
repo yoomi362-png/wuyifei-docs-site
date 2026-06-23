@@ -5,12 +5,7 @@ const elements = {
   branch: document.querySelector('#branch'),
   connectBtn: document.querySelector('#connect-btn'),
   status: document.querySelector('#status'),
-  categoryName: document.querySelector('#category-name'),
-  categoryDescription: document.querySelector('#category-description'),
-  addCategoryBtn: document.querySelector('#add-category-btn'),
-  categoryAdminList: document.querySelector('#category-admin-list'),
   docTitle: document.querySelector('#doc-title'),
-  docCategory: document.querySelector('#doc-category'),
   docTags: document.querySelector('#doc-tags'),
   docDescription: document.querySelector('#doc-description'),
   docFile: document.querySelector('#doc-file'),
@@ -26,7 +21,7 @@ const state = {
   token: sessionStorage.getItem('github_token') || '',
   contentPath: 'data/content.json',
   contentSha: '',
-  content: { categories: [], docs: [] },
+  content: { docs: [] },
 };
 
 elements.token.value = state.token;
@@ -34,15 +29,6 @@ elements.token.value = state.token;
 function setStatus(message, kind = 'muted') {
   elements.status.textContent = message;
   elements.status.dataset.kind = kind;
-}
-
-function slugify(value) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .replace(/-+/g, '-');
 }
 
 function today() {
@@ -77,46 +63,22 @@ async function readContent() {
   const raw = atob(data.content.replace(/\n/g, ''));
   const bytes = Uint8Array.from(raw, (char) => char.charCodeAt(0));
   state.content = JSON.parse(new TextDecoder().decode(bytes));
-  renderAdmin();
+  renderDocs();
 }
 
-function renderCategories() {
-  elements.docCategory.innerHTML = state.content.categories
-    .map((category) => `<option value="${category.id}">${category.name}</option>`)
-    .join('');
-
-  elements.categoryAdminList.innerHTML = state.content.categories
+function renderDocs() {
+  const sorted = [...(state.content.docs || [])].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  elements.docAdminList.innerHTML = sorted
     .map(
-      (category) => `
+      (doc) => `
         <article class="admin-card">
-          <strong>${category.name}</strong>
-          <p>${category.description}</p>
-          <small>${category.id}</small>
+          <strong>${doc.title}</strong>
+          <p>${doc.description}</p>
+          <small>${doc.updatedAt} · ${doc.fileType || 'doc'}</small>
         </article>
       `
     )
     .join('');
-}
-
-function renderDocs() {
-  const sorted = [...state.content.docs].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  elements.docAdminList.innerHTML = sorted
-    .map((doc) => {
-      const category = state.content.categories.find((item) => item.id === doc.category);
-      return `
-        <article class="admin-card">
-          <strong>${doc.title}</strong>
-          <p>${doc.description}</p>
-          <small>${category?.name || '未分类'} · ${doc.updatedAt} · ${doc.fileType || 'doc'}</small>
-        </article>
-      `;
-    })
-    .join('');
-}
-
-function renderAdmin() {
-  renderCategories();
-  renderDocs();
 }
 
 async function saveContent(message) {
@@ -127,6 +89,7 @@ async function saveContent(message) {
     binary += String.fromCharCode(byte);
   });
   const encoded = btoa(binary);
+
   const data = await api(`/repos/${state.owner}/${state.repo}/contents/${state.contentPath}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -136,6 +99,7 @@ async function saveContent(message) {
       branch: state.branch,
     }),
   });
+
   state.contentSha = data.content.sha;
 }
 
@@ -153,11 +117,12 @@ function readFileAsBase64(file) {
 
 async function uploadRepoFile(file) {
   const ext = getFileType(file.name);
-  const safeName = `${Date.now()}-${slugify(file.name.replace(/\.[^.]+$/, ''))}.${ext}`;
+  const baseName = file.name.replace(/\.[^.]+$/, '').trim() || `document-${Date.now()}`;
+  const safeName = `${baseName}.${ext}`;
   const path = `uploads/${today().slice(0, 7)}/${safeName}`;
   const content = await readFileAsBase64(file);
 
-  await api(`/repos/${state.owner}/${state.repo}/contents/${path}`, {
+  await api(`/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(path).replace(/%2F/g, '/')}`, {
     method: 'PUT',
     body: JSON.stringify({
       message: `Upload ${file.name}`,
@@ -183,35 +148,11 @@ async function connect() {
   sessionStorage.setItem('github_token', state.token);
   setStatus('正在读取仓库数据...');
   await readContent();
-  setStatus('已连接仓库，可以开始添加分类和上传文档。', 'success');
-}
-
-async function addCategory() {
-  const name = elements.categoryName.value.trim();
-  const description = elements.categoryDescription.value.trim();
-
-  if (!name || !description) {
-    setStatus('分类名称和说明都需要填写。', 'error');
-    return;
-  }
-
-  const id = slugify(name);
-  if (state.content.categories.some((item) => item.id === id)) {
-    setStatus('这个分类已经存在。', 'error');
-    return;
-  }
-
-  state.content.categories.push({ id, name, description });
-  await saveContent(`Add category ${name}`);
-  renderAdmin();
-  elements.categoryName.value = '';
-  elements.categoryDescription.value = '';
-  setStatus(`分类“${name}”已添加。`, 'success');
+  setStatus('已连接仓库，可以开始上传文档。', 'success');
 }
 
 async function publishDoc() {
   const title = elements.docTitle.value.trim();
-  const category = elements.docCategory.value;
   const description = elements.docDescription.value.trim();
   const tags = elements.docTags.value
     .split(',')
@@ -220,8 +161,8 @@ async function publishDoc() {
   const file = elements.docFile.files[0];
   const url = elements.docUrl.value.trim();
 
-  if (!title || !category || !description) {
-    setStatus('标题、分类和摘要需要填写完整。', 'error');
+  if (!title || !description) {
+    setStatus('标题和摘要需要填写完整。', 'error');
     return;
   }
 
@@ -230,7 +171,7 @@ async function publishDoc() {
     return;
   }
 
-  setStatus('正在上传文档并更新目录...');
+  setStatus('正在上传文档并更新列表...');
 
   let href = url;
   let external = Boolean(url);
@@ -244,7 +185,6 @@ async function publishDoc() {
 
   state.content.docs.unshift({
     title,
-    category,
     description,
     href,
     updatedAt: today(),
@@ -254,7 +194,7 @@ async function publishDoc() {
   });
 
   await saveContent(`Publish document ${title}`);
-  renderAdmin();
+  renderDocs();
 
   elements.docTitle.value = '';
   elements.docDescription.value = '';
@@ -265,5 +205,4 @@ async function publishDoc() {
 }
 
 elements.connectBtn.addEventListener('click', () => connect().catch((error) => setStatus(`连接失败：${error.message}`, 'error')));
-elements.addCategoryBtn.addEventListener('click', () => addCategory().catch((error) => setStatus(`添加失败：${error.message}`, 'error')));
 elements.publishBtn.addEventListener('click', () => publishDoc().catch((error) => setStatus(`发布失败：${error.message}`, 'error')));

@@ -419,6 +419,11 @@ button {
   padding-bottom: 28px;
 }
 
+.docs-layout.single,
+.admin-grid.single-admin {
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+}
+
 .upload-section {
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
 }

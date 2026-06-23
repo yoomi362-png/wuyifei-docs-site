@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="wuyifei.xyz 文档站 - 长期存放文档、笔记与资料的公开网站。" />
+    <title>wuyifei.xyz | 文档站</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">W</div>
+        <div>
+          <div class="name">wuyifei.xyz</div>
+          <div class="sub">公开文档站</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#docs">文档</a>
+        <a href="#about">说明</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">长期使用 · 公网可访问 · 自定义域名</p>
+          <h1>把文档集中放在这里。</h1>
+          <p class="lead">
+            这是一个为长期存放资料、笔记、说明书和归档文档而设计的网站。结构清晰、加载轻量，适合持续扩展。
+          </p>
+          <div class="cta-row">
+            <a class="button primary" href="#docs">查看文档</a>
+            <a class="button ghost" href="#about">了解站点</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <div class="panel-title">站点状态</div>
+          <ul class="status-list">
+            <li><span>域名</span><strong>wuyifei.xyz</strong></li>
+            <li><span>部署</span><strong>静态托管</strong></li>
+            <li><span>访问</span><strong>公网可用</strong></li>
+            <li><span>用途</span><strong>文档归档</strong></li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="toolbar" aria-label="文档筛选">
+        <input id="search" type="search" placeholder="搜索文档标题或标签" />
+        <div class="chips">
+          <button class="chip active" data-filter="all">全部</button>
+          <button class="chip" data-filter="guide">指南</button>
+          <button class="chip" data-filter="note">笔记</button>
+          <button class="chip" data-filter="archive">归档</button>
+        </div>
+      </section>
+
+      <section id="docs" class="docs">
+        <article class="doc-card" data-tags="guide intro">
+          <div class="doc-meta">指南 · 入门</div>
+          <h2>站点使用说明</h2>
+          <p>说明如何发布、更新和整理文档，适合站点长期维护。</p>
+          <a href="./docs/site-guide.html">打开文档</a>
+        </article>
+        <article class="doc-card" data-tags="note workflow">
+          <div class="doc-meta">笔记 · 流程</div>
+          <h2>文档整理规范</h2>
+          <p>统一命名、目录和版本记录，减少后续维护成本。</p>
+          <a href="./docs/organization.html">打开文档</a>
+        </article>
+        <article class="doc-card" data-tags="archive reference">
+          <div class="doc-meta">归档 · 参考</div>
+          <h2>资料索引</h2>
+          <p>按主题整理历史资料与附件入口，方便长期查询。</p>
+          <a href="./docs/archive-index.html">打开文档</a>
+        </article>
+      </section>
+
+      <section id="about" class="info-grid">
+        <div class="info-box">
+          <h3>适合长期使用</h3>
+          <p>静态网站稳定、维护简单、不会被服务器运维拖住。</p>
+        </div>
+        <div class="info-box">
+          <h3>方便扩展</h3>
+          <p>后面可以继续加分类、全文搜索、下载区和附件页面。</p>
+        </div>
+        <div class="info-box">
+          <h3>域名直达</h3>
+          <p>绑定完成后，用户直接访问 <code>wuyifei.xyz</code> 即可打开站点。</p>
+        </div>
+      </section>
+
+      <section id="contact" class="footer-note">
+        <p>联系方式、更新日志、私有资料入口都可以后续加到这里。</p>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+ </html>

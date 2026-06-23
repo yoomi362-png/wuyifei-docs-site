@@ -1,21 +1,31 @@
 # wuyifei.xyz 文档站
 
-这是一个可直接部署到 GitHub Pages / Cloudflare Pages 的静态文档站。
+这是一个静态文档目录网站，适合长期维护。
 
-## 本地预览
+## 网站结构
 
-直接打开 `index.html`，或用任意静态服务器运行。
+- `index.html`：首页
+- `styles.css`：样式
+- `script.js`：前端渲染逻辑
+- `docs-data.js`：分类和文档数据
+- `docs/`：站内文档页面
 
-## 部署
+## 新增文档
 
-### GitHub Pages
+1. 把文档页放进 `docs/`，或者准备一个外部文档链接
+2. 在 `docs-data.js` 的 `window.DOC_ITEMS` 里添加一条记录
+3. 如果需要新分类，在 `window.DOC_CATEGORIES` 里添加分类
+4. 提交并推送到 GitHub
 
-1. 新建仓库并上传所有文件
-2. 仓库 Settings -> Pages
-3. Source 选 `Deploy from a branch`
-4. Branch 选 `main`，Folder 选 `/root`
-5. 自定义域名填写 `wuyifei.xyz`
+## 文档记录格式
 
-### DNS
-
-把域名 `wuyifei.xyz` 的 DNS 按 Pages 平台要求指向部署服务。
+```js
+{
+  title: '文档标题',
+  category: 'guide',
+  description: '一段简短摘要',
+  href: './docs/example.html',
+  updatedAt: '2026-06-23',
+  tags: ['标签1', '标签2'],
+}
+```

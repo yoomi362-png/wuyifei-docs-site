@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="wuyifei.xyz 文档站 - 长期存放文档、笔记与资料的公开网站。" />
-    <title>wuyifei.xyz | 文档站</title>
+    <meta
+      name="description"
+      content="wuyifei.xyz 文档站，按分类公开展示你的文档、笔记、项目资料与归档内容。"
+    />
+    <title>wuyifei.xyz | 文档目录</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,91 +16,91 @@
         <div class="mark">W</div>
         <div>
           <div class="name">wuyifei.xyz</div>
-          <div class="sub">公开文档站</div>
+          <div class="sub">公开文档目录</div>
         </div>
       </div>
       <nav class="nav">
-        <a href="#docs">文档</a>
-        <a href="#about">说明</a>
-        <a href="#contact">联系</a>
+        <a href="#library">文档库</a>
+        <a href="#categories">分类</a>
+        <a href="#guide">发布方法</a>
       </nav>
     </header>
 
     <main class="shell">
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">长期使用 · 公网可访问 · 自定义域名</p>
-          <h1>把文档集中放在这里。</h1>
+          <p class="eyebrow">你负责上传文档，网站负责整理展示</p>
+          <h1>按分类公开你的文档。</h1>
           <p class="lead">
-            这是一个为长期存放资料、笔记、说明书和归档文档而设计的网站。结构清晰、加载轻量，适合持续扩展。
+            这个站点已经改成文档目录模式。你把文档页面、PDF 或外链资料放进列表，访客就能按分类浏览、搜索并打开对应内容。
           </p>
           <div class="cta-row">
-            <a class="button primary" href="#docs">查看文档</a>
-            <a class="button ghost" href="#about">了解站点</a>
+            <a class="button primary" href="#library">浏览文档</a>
+            <a class="button ghost" href="./docs/publish-guide.html">查看发布说明</a>
           </div>
         </div>
+
         <aside class="hero-panel">
-          <div class="panel-title">站点状态</div>
-          <ul class="status-list">
-            <li><span>域名</span><strong>wuyifei.xyz</strong></li>
-            <li><span>部署</span><strong>静态托管</strong></li>
-            <li><span>访问</span><strong>公网可用</strong></li>
-            <li><span>用途</span><strong>文档归档</strong></li>
-          </ul>
+          <div class="panel-title">目录概览</div>
+          <div id="summary" class="summary-grid"></div>
         </aside>
       </section>
 
-      <section class="toolbar" aria-label="文档筛选">
-        <input id="search" type="search" placeholder="搜索文档标题或标签" />
-        <div class="chips">
-          <button class="chip active" data-filter="all">全部</button>
-          <button class="chip" data-filter="guide">指南</button>
-          <button class="chip" data-filter="note">笔记</button>
-          <button class="chip" data-filter="archive">归档</button>
+      <section class="toolbar" id="library" aria-label="文档筛选">
+        <div class="toolbar-head">
+          <div>
+            <p class="section-kicker">文档库</p>
+            <h2>按分类查找内容</h2>
+          </div>
+          <p id="result-count" class="result-count"></p>
         </div>
+
+        <div class="search-row">
+          <input id="search" type="search" placeholder="搜索标题、描述、标签" />
+          <a class="button mini" href="./docs/publish-guide.html">新增文档说明</a>
+        </div>
+
+        <div id="category-chips" class="chips"></div>
       </section>
 
-      <section id="docs" class="docs">
-        <article class="doc-card" data-tags="guide intro">
-          <div class="doc-meta">指南 · 入门</div>
-          <h2>站点使用说明</h2>
-          <p>说明如何发布、更新和整理文档，适合站点长期维护。</p>
-          <a href="./docs/site-guide.html">打开文档</a>
-        </article>
-        <article class="doc-card" data-tags="note workflow">
-          <div class="doc-meta">笔记 · 流程</div>
-          <h2>文档整理规范</h2>
-          <p>统一命名、目录和版本记录，减少后续维护成本。</p>
-          <a href="./docs/organization.html">打开文档</a>
-        </article>
-        <article class="doc-card" data-tags="archive reference">
-          <div class="doc-meta">归档 · 参考</div>
-          <h2>资料索引</h2>
-          <p>按主题整理历史资料与附件入口，方便长期查询。</p>
-          <a href="./docs/archive-index.html">打开文档</a>
-        </article>
+      <section id="categories" class="category-strip">
+        <div class="strip-head">
+          <p class="section-kicker">分类目录</p>
+          <h2>清楚一点，后面就省很多事</h2>
+        </div>
+        <div id="category-overview" class="overview-grid"></div>
       </section>
 
-      <section id="about" class="info-grid">
-        <div class="info-box">
-          <h3>适合长期使用</h3>
-          <p>静态网站稳定、维护简单、不会被服务器运维拖住。</p>
+      <section class="docs-layout">
+        <div class="docs-main">
+          <div class="section-head">
+            <p class="section-kicker">全部文档</p>
+            <h2>当前可公开访问的内容</h2>
+          </div>
+          <div id="docs-list" class="docs-list"></div>
+          <p id="empty-state" class="empty-state" hidden>没有找到匹配的文档。</p>
         </div>
-        <div class="info-box">
-          <h3>方便扩展</h3>
-          <p>后面可以继续加分类、全文搜索、下载区和附件页面。</p>
-        </div>
-        <div class="info-box">
-          <h3>域名直达</h3>
-          <p>绑定完成后，用户直接访问 <code>wuyifei.xyz</code> 即可打开站点。</p>
-        </div>
-      </section>
 
-      <section id="contact" class="footer-note">
-        <p>联系方式、更新日志、私有资料入口都可以后续加到这里。</p>
+        <aside class="sidebar">
+          <section class="side-panel">
+            <div class="section-kicker">最近更新</div>
+            <div id="recent-list" class="recent-list"></div>
+          </section>
+
+          <section id="guide" class="side-panel">
+            <div class="section-kicker">发布方法</div>
+            <ol class="steps">
+              <li>把文档文件放进 `docs/` 或使用外部文档链接。</li>
+              <li>在 `docs-data.js` 里添加标题、分类、摘要和链接。</li>
+              <li>推送到 GitHub，访客就能通过网站看到新文档。</li>
+            </ol>
+            <a class="button mini full" href="./docs/publish-guide.html">打开详细说明</a>
+          </section>
+        </aside>
       </section>
     </main>
 
+    <script src="./docs-data.js"></script>
     <script src="./script.js"></script>
   </body>
- </html>
+</html>

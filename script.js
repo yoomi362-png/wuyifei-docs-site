@@ -7,9 +7,8 @@ const recentList = document.querySelector('#recent-list');
 const resultCount = document.querySelector('#result-count');
 const emptyState = document.querySelector('#empty-state');
 
-const categories = window.DOC_CATEGORIES || [];
-const docs = window.DOC_ITEMS || [];
-
+let categories = [];
+let docs = [];
 let activeCategory = 'all';
 
 function formatDate(value) {
@@ -20,17 +19,30 @@ function formatDate(value) {
   });
 }
 
-function buildSummary() {
-  const totalCategories = categories.length;
-  const totalDocs = docs.length;
-  const latestDate = docs
-    .map((item) => item.updatedAt)
-    .sort()
-    .at(-1);
+function getFileLabel(item) {
+  if (item.external) return '外部链接';
+  const type = (item.fileType || '').toLowerCase();
+  if (type === 'pdf') return 'PDF';
+  if (type === 'doc' || type === 'docx') return 'Word';
+  return '文档';
+}
 
+async function loadContent() {
+  const response = await fetch(`./data/content.json?ts=${Date.now()}`);
+  if (!response.ok) {
+    throw new Error('Failed to load content');
+  }
+
+  const data = await response.json();
+  categories = data.categories || [];
+  docs = data.docs || [];
+}
+
+function buildSummary() {
+  const latestDate = docs.map((item) => item.updatedAt).sort().at(-1);
   const items = [
-    { label: '分类', value: totalCategories },
-    { label: '文档', value: totalDocs },
+    { label: '分类', value: categories.length },
+    { label: '文档', value: docs.length },
     { label: '最近更新', value: latestDate ? formatDate(latestDate) : '暂无' },
   ];
 
@@ -47,7 +59,7 @@ function buildSummary() {
 }
 
 function buildCategoryControls() {
-  const all = [{ id: 'all', name: '全部', description: '显示全部文档' }, ...categories];
+  const all = [{ id: 'all', name: '全部' }, ...categories];
 
   categoryChips.innerHTML = all
     .map(
@@ -93,14 +105,14 @@ function buildCategoryControls() {
 function buildRecentList() {
   const recent = [...docs]
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .slice(0, 4);
+    .slice(0, 5);
 
   recentList.innerHTML = recent
     .map((item) => {
       const category = categories.find((entry) => entry.id === item.category);
       return `
-        <a class="recent-card" href="${item.href}">
-          <span>${category?.name || '未分类'}</span>
+        <a class="recent-card" href="${item.href}" target="${item.external ? '_blank' : '_self'}" rel="noreferrer">
+          <span>${category?.name || '未分类'} · ${getFileLabel(item)}</span>
           <strong>${item.title}</strong>
           <small>${formatDate(item.updatedAt)}</small>
         </a>
@@ -111,7 +123,6 @@ function buildRecentList() {
 
 function getFilteredDocs() {
   const term = search.value.trim().toLowerCase();
-
   return docs.filter((item) => {
     const haystack = [item.title, item.description, ...(item.tags || [])].join(' ').toLowerCase();
     const matchesTerm = !term || haystack.includes(term);
@@ -122,14 +133,11 @@ function getFilteredDocs() {
 
 function render() {
   const filtered = getFilteredDocs();
-
   resultCount.textContent = `共 ${filtered.length} 篇`;
   emptyState.hidden = filtered.length > 0;
 
   const grouped = filtered.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
+    if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
     return acc;
   }, {});
@@ -152,10 +160,11 @@ function render() {
               <h3>${item.title}</h3>
               <p>${item.description}</p>
               <div class="tag-row">
+                <span class="tag strong">${getFileLabel(item)}</span>
                 ${(item.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join('')}
               </div>
               <a class="doc-link" href="${item.href}" target="${item.external ? '_blank' : '_self'}" rel="noreferrer">
-                ${item.external ? '打开外部文档' : '查看文档'}
+                ${item.fileType === 'pdf' ? '打开 PDF' : item.fileType === 'doc' || item.fileType === 'docx' ? '下载 Word 文档' : item.external ? '打开链接' : '查看文档'}
               </a>
             </article>
           `
@@ -175,9 +184,15 @@ function render() {
     .join('');
 }
 
-buildSummary();
-buildCategoryControls();
-buildRecentList();
-render();
+loadContent()
+  .then(() => {
+    buildSummary();
+    buildCategoryControls();
+    buildRecentList();
+    render();
+  })
+  .catch(() => {
+    docsList.innerHTML = '<p class="empty-state">内容暂时无法加载，请稍后再试。</p>';
+  });
 
 search.addEventListener('input', render);

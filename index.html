@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="wuyifei.xyz 文档站，按分类公开展示你的文档、笔记、项目资料与归档内容。"
+      content="wuyifei.xyz 文档中心，集中展示分类资料、归档内容和最新上传文档。"
     />
-    <title>wuyifei.xyz | 文档目录</title>
+    <title>wuyifei.xyz | 文档中心</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -16,32 +16,32 @@
         <div class="mark">W</div>
         <div>
           <div class="name">wuyifei.xyz</div>
-          <div class="sub">公开文档目录</div>
+          <div class="sub">文档中心</div>
         </div>
       </div>
       <nav class="nav">
         <a href="#library">文档库</a>
         <a href="#categories">分类</a>
-        <a href="#guide">发布方法</a>
+        <a href="#updates">最近更新</a>
       </nav>
     </header>
 
     <main class="shell">
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">你负责上传文档，网站负责整理展示</p>
-          <h1>按分类公开你的文档。</h1>
+          <p class="eyebrow">统一索引 · 分类浏览 · 在线查看</p>
+          <h1>文档中心</h1>
           <p class="lead">
-            这个站点已经改成文档目录模式。你把文档页面、PDF 或外链资料放进列表，访客就能按分类浏览、搜索并打开对应内容。
+            这里集中展示我维护的文档、资料与归档内容。你可以从分类入口开始，也可以直接搜索标题、摘要和标签，快速找到需要的文件。
           </p>
           <div class="cta-row">
-            <a class="button primary" href="#library">浏览文档</a>
-            <a class="button ghost" href="./docs/publish-guide.html">查看发布说明</a>
+            <a class="button primary" href="#library">开始查看</a>
+            <a class="button ghost" href="#categories">浏览分类</a>
           </div>
         </div>
 
         <aside class="hero-panel">
-          <div class="panel-title">目录概览</div>
+          <div class="panel-title">中心概览</div>
           <div id="summary" class="summary-grid"></div>
         </aside>
       </section>
@@ -49,15 +49,14 @@
       <section class="toolbar" id="library" aria-label="文档筛选">
         <div class="toolbar-head">
           <div>
-            <p class="section-kicker">文档库</p>
-            <h2>按分类查找内容</h2>
+            <p class="section-kicker">文档索引</p>
+            <h2>按分类或关键词定位内容</h2>
           </div>
           <p id="result-count" class="result-count"></p>
         </div>
 
         <div class="search-row">
-          <input id="search" type="search" placeholder="搜索标题、描述、标签" />
-          <a class="button mini" href="./docs/publish-guide.html">新增文档说明</a>
+          <input id="search" type="search" placeholder="搜索标题、摘要、标签" />
         </div>
 
         <div id="category-chips" class="chips"></div>
@@ -66,7 +65,7 @@
       <section id="categories" class="category-strip">
         <div class="strip-head">
           <p class="section-kicker">分类目录</p>
-          <h2>清楚一点，后面就省很多事</h2>
+          <h2>从主题进入，查找会更快</h2>
         </div>
         <div id="category-overview" class="overview-grid"></div>
       </section>
@@ -74,33 +73,31 @@
       <section class="docs-layout">
         <div class="docs-main">
           <div class="section-head">
-            <p class="section-kicker">全部文档</p>
-            <h2>当前可公开访问的内容</h2>
+            <p class="section-kicker">公开文档</p>
+            <h2>当前可索引内容</h2>
           </div>
           <div id="docs-list" class="docs-list"></div>
           <p id="empty-state" class="empty-state" hidden>没有找到匹配的文档。</p>
         </div>
 
         <aside class="sidebar">
-          <section class="side-panel">
+          <section class="side-panel" id="updates">
             <div class="section-kicker">最近更新</div>
             <div id="recent-list" class="recent-list"></div>
           </section>
 
-          <section id="guide" class="side-panel">
-            <div class="section-kicker">发布方法</div>
-            <ol class="steps">
-              <li>把文档文件放进 `docs/` 或使用外部文档链接。</li>
-              <li>在 `docs-data.js` 里添加标题、分类、摘要和链接。</li>
-              <li>推送到 GitHub，访客就能通过网站看到新文档。</li>
-            </ol>
-            <a class="button mini full" href="./docs/publish-guide.html">打开详细说明</a>
+          <section class="side-panel">
+            <div class="section-kicker">使用方式</div>
+            <div class="help-copy">
+              <p>先从分类进入，再按标题或标签缩小范围。</p>
+              <p>PDF 和 Word 文档会直接进入对应的资料卡片。</p>
+              <p>最近更新区域可以快速查看刚刚新增的内容。</p>
+            </div>
           </section>
         </aside>
       </section>
     </main>
 
-    <script src="./docs-data.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

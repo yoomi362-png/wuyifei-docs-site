@@ -1,31 +1,38 @@
-# wuyifei.xyz 文档站
+# wuyifei.xyz 文档中心
 
-这是一个静态文档目录网站，适合长期维护。
+这是一个部署在 GitHub Pages 上的静态文档中心，包含公开前台和管理员后台。
 
-## 网站结构
+## 页面
 
-- `index.html`：首页
-- `styles.css`：样式
-- `script.js`：前端渲染逻辑
-- `docs-data.js`：分类和文档数据
-- `docs/`：站内文档页面
+- `index.html`：访客访问的文档中心首页
+- `admin.html`：管理员后台
+- `data/content.json`：分类和文档目录数据
+- `uploads/`：后台上传的 PDF / Word 文件会放在这里
 
-## 新增文档
+## 管理方式
 
-1. 把文档页放进 `docs/`，或者准备一个外部文档链接
-2. 在 `docs-data.js` 的 `window.DOC_ITEMS` 里添加一条记录
-3. 如果需要新分类，在 `window.DOC_CATEGORIES` 里添加分类
-4. 提交并推送到 GitHub
+管理员打开 `admin.html` 后，可以：
 
-## 文档记录格式
+- 连接 GitHub 仓库
+- 新增分类
+- 上传 PDF / Word 文档
+- 录入外部文档链接
+- 自动更新 `data/content.json`
 
-```js
-{
-  title: '文档标题',
-  category: 'guide',
-  description: '一段简短摘要',
-  href: './docs/example.html',
-  updatedAt: '2026-06-23',
-  tags: ['标签1', '标签2'],
-}
-```
+## Token 权限
+
+后台上传依赖 GitHub API。建议使用只授权当前仓库的 fine-grained token，并确保至少包含：
+
+- `Contents: Read and write`
+- `Metadata: Read`
+
+Token 只保存在浏览器当前会话中，不写入仓库文件。
+
+## 访客体验
+
+前台首页只负责：
+
+- 分类浏览
+- 文档搜索
+- 最近更新
+- 打开 PDF、Word 或站内文档

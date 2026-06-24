@@ -1,5 +1,6 @@
 # wuyifei.xyz 文档中心
-
+##访问地址
+https://wuyifei.xyz
 这是一个部署在 GitHub Pages 上的静态文档中心，包含公开前台和管理员上传后台。
 
 ## 页面

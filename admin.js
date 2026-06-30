@@ -6,7 +6,6 @@ const elements = {
   connectBtn: document.querySelector('#connect-btn'),
   status: document.querySelector('#status'),
   docTitle: document.querySelector('#doc-title'),
-  docTags: document.querySelector('#doc-tags'),
   docDescription: document.querySelector('#doc-description'),
   docFile: document.querySelector('#doc-file'),
   docUrl: document.querySelector('#doc-url'),
@@ -21,7 +20,7 @@ const state = {
   token: sessionStorage.getItem('github_token') || '',
   contentPath: 'data/content.json',
   contentSha: '',
-  content: { docs: [] },
+  content: { document: null },
 };
 
 elements.token.value = state.token;
@@ -37,6 +36,15 @@ function today() {
 
 function getFileType(name = '') {
   return name.split('.').pop().toLowerCase();
+}
+
+function getFileLabel(item) {
+  if (!item) return '';
+  if (item.external) return '外部链接';
+  const type = (item.fileType || '').toLowerCase();
+  if (type === 'pdf') return 'PDF';
+  if (type === 'doc' || type === 'docx') return 'Word';
+  return '文档';
 }
 
 async function api(path, options = {}) {
@@ -63,22 +71,23 @@ async function readContent() {
   const raw = atob(data.content.replace(/\n/g, ''));
   const bytes = Uint8Array.from(raw, (char) => char.charCodeAt(0));
   state.content = JSON.parse(new TextDecoder().decode(bytes));
-  renderDocs();
+  renderDoc();
 }
 
-function renderDocs() {
-  const sorted = [...(state.content.docs || [])].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  elements.docAdminList.innerHTML = sorted
-    .map(
-      (doc) => `
-        <article class="admin-card">
-          <strong>${doc.title}</strong>
-          <p>${doc.description}</p>
-          <small>${doc.updatedAt} · ${doc.fileType || 'doc'}</small>
-        </article>
-      `
-    )
-    .join('');
+function renderDoc() {
+  const item = state.content.document;
+  if (!item) {
+    elements.docAdminList.innerHTML = '<p class="empty-state">当前还没有文档。</p>';
+    return;
+  }
+
+  elements.docAdminList.innerHTML = `
+    <article class="admin-card">
+      <strong>${item.title}</strong>
+      <p>${item.description}</p>
+      <small>${getFileLabel(item)} · ${item.updatedAt}</small>
+    </article>
+  `;
 }
 
 async function saveContent(message) {
@@ -115,14 +124,37 @@ function readFileAsBase64(file) {
   });
 }
 
-async function uploadRepoFile(file) {
-  const ext = getFileType(file.name);
-  const baseName = file.name.replace(/\.[^.]+$/, '').trim() || `document-${Date.now()}`;
-  const safeName = `${baseName}.${ext}`;
-  const path = `uploads/${today().slice(0, 7)}/${safeName}`;
+async function deleteExistingFile(filePath) {
+  if (!filePath) return;
+
+  const response = await fetch(
+    `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(filePath).replace(/%2F/g, '/')}?ref=${state.branch}`,
+    {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${state.token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    }
+  );
+
+  if (!response.ok) return;
+
+  const data = await response.json();
+  await api(`/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(filePath).replace(/%2F/g, '/')}`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      message: `Remove old file ${filePath}`,
+      sha: data.sha,
+      branch: state.branch,
+    }),
+  });
+}
+
+async function uploadRepoFile(file, targetPath) {
   const content = await readFileAsBase64(file);
 
-  await api(`/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(path).replace(/%2F/g, '/')}`, {
+  await api(`/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(targetPath).replace(/%2F/g, '/')}`, {
     method: 'PUT',
     body: JSON.stringify({
       message: `Upload ${file.name}`,
@@ -131,7 +163,7 @@ async function uploadRepoFile(file) {
     }),
   });
 
-  return `./${path}`;
+  return `./${targetPath}`;
 }
 
 async function connect() {
@@ -148,60 +180,56 @@ async function connect() {
   sessionStorage.setItem('github_token', state.token);
   setStatus('正在读取仓库数据...');
   await readContent();
-  setStatus('已连接仓库，可以开始上传文档。', 'success');
+  setStatus('已连接仓库，可以开始替换文档。', 'success');
 }
 
 async function publishDoc() {
-  const title = elements.docTitle.value.trim();
-  const description = elements.docDescription.value.trim();
-  const tags = elements.docTags.value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
+  const title = elements.docTitle.value.trim() || '网络跳跃教程';
+  const description = elements.docDescription.value.trim() || '当前站点唯一公开文档，访客可以直接在线查看或下载。';
   const file = elements.docFile.files[0];
   const url = elements.docUrl.value.trim();
-
-  if (!title || !description) {
-    setStatus('标题和摘要需要填写完整。', 'error');
-    return;
-  }
 
   if (!file && !url) {
     setStatus('请选择文件，或者填写一个外部链接。', 'error');
     return;
   }
 
-  setStatus('正在上传文档并更新列表...');
+  setStatus('正在更新唯一文档...');
 
+  const previousPath = state.content.document?.filePath;
   let href = url;
   let external = Boolean(url);
   let fileType = 'link';
+  let filePath = previousPath || 'docs/网络跳跃教程.pdf';
 
   if (file) {
-    href = await uploadRepoFile(file);
-    external = false;
     fileType = getFileType(file.name);
+    filePath = `docs/${title}.${fileType}`;
+    if (previousPath && previousPath !== filePath) {
+      await deleteExistingFile(previousPath).catch(() => {});
+    }
+    href = await uploadRepoFile(file, filePath);
+    external = false;
   }
 
-  state.content.docs.unshift({
+  state.content.document = {
     title,
     description,
     href,
     updatedAt: today(),
-    tags,
+    tags: [fileType.toUpperCase()],
     external,
     fileType,
-  });
+    filePath,
+  };
 
   await saveContent(`Publish document ${title}`);
-  renderDocs();
+  renderDoc();
 
-  elements.docTitle.value = '';
   elements.docDescription.value = '';
-  elements.docTags.value = '';
   elements.docFile.value = '';
   elements.docUrl.value = '';
-  setStatus(`文档“${title}”已发布。`, 'success');
+  setStatus(`文档“${title}”已更新。`, 'success');
 }
 
 elements.connectBtn.addEventListener('click', () => connect().catch((error) => setStatus(`连接失败：${error.message}`, 'error')));

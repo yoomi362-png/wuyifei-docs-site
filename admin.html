@@ -12,7 +12,7 @@
         <div class="mark">A</div>
         <div>
           <div class="name">文档上传后台</div>
-          <div class="sub">上传 PDF / Word / 外链</div>
+          <div class="sub">只保留当前这一份文档</div>
         </div>
       </div>
       <nav class="nav">
@@ -49,14 +49,10 @@
 
       <section class="admin-grid upload-section">
         <section class="side-panel">
-          <div class="section-kicker">上传文档</div>
+          <div class="section-kicker">替换文档</div>
           <div class="field">
-            <label for="doc-title">文档标题</label>
-            <input id="doc-title" type="text" placeholder="例如：2026 项目方案" />
-          </div>
-          <div class="field">
-            <label for="doc-tags">标签</label>
-            <input id="doc-tags" type="text" placeholder="用逗号分隔，例如：项目, PDF" />
+            <label for="doc-title">标题</label>
+            <input id="doc-title" type="text" value="网络跳跃教程" />
           </div>
           <div class="field">
             <label for="doc-description">摘要</label>
@@ -70,11 +66,11 @@
             <label for="doc-url">或使用外部链接</label>
             <input id="doc-url" type="url" placeholder="https://..." />
           </div>
-          <button id="publish-btn" class="button primary full">发布文档</button>
+          <button id="publish-btn" class="button primary full">发布并覆盖当前文档</button>
         </section>
 
         <section class="side-panel">
-          <div class="section-kicker">当前已发布</div>
+          <div class="section-kicker">当前文档</div>
           <div id="doc-admin-list" class="admin-list"></div>
         </section>
       </section>

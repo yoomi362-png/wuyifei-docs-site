@@ -5,79 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="wuyifei.xyz 文档中心，集中展示管理员上传的 PDF、Word 和其他公开文档。"
+      content="wuyifei.xyz 仅展示一份公开文档：网络跳跃教程。"
     />
-    <title>wuyifei.xyz | 文档中心</title>
+    <title>wuyifei.xyz | 网络跳跃教程</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark">W</div>
-        <div>
-          <div class="name">wuyifei.xyz</div>
-          <div class="sub">文档中心</div>
-        </div>
-      </div>
-      <nav class="nav">
-        <a href="#library">文档列表</a>
-        <a href="#updates">最近更新</a>
-      </nav>
-    </header>
-
-    <main class="shell">
-      <section class="hero">
+    <main class="shell single-page">
+      <section class="hero single-hero">
         <div class="hero-copy">
-          <p class="eyebrow">文档总览 · 搜索查看 · 在线访问</p>
-          <h1>文档中心</h1>
+          <p class="eyebrow">公开文档</p>
+          <h1>网络跳跃教程</h1>
           <p class="lead">
-            这里集中展示管理员已上传的 PDF、Word 和公开资料。你可以直接搜索标题或关键词，快速找到需要查看的文档。
+            这是网站唯一公开展示的文档。点击下面的按钮即可查看 PDF。
           </p>
           <div class="cta-row">
-            <a class="button primary" href="#library">查看文档</a>
+            <a class="button primary" href="./docs/网络跳跃教程.pdf">打开文档</a>
+            <a class="button ghost" href="./admin.html">管理员后台</a>
           </div>
         </div>
 
         <aside class="hero-panel">
-          <div class="panel-title">中心概览</div>
+          <div class="panel-title">文档信息</div>
           <div id="summary" class="summary-grid"></div>
         </aside>
       </section>
 
-      <section class="toolbar" id="library" aria-label="文档筛选">
-        <div class="toolbar-head">
-          <div>
-            <p class="section-kicker">文档列表</p>
-            <h2>查看已发布内容</h2>
-          </div>
-          <p id="result-count" class="result-count"></p>
+      <section class="single-doc-area">
+        <div class="section-head">
+          <p class="section-kicker">当前文档</p>
+          <h2>网站中只保留这一份内容</h2>
         </div>
-
-        <div class="search-row">
-          <input id="search" type="search" placeholder="搜索标题、摘要、标签" />
-        </div>
-      </section>
-
-      <section class="docs-layout single">
-        <div class="docs-main">
-          <div id="docs-list" class="card-grid"></div>
-          <p id="empty-state" class="empty-state" hidden>没有找到匹配的文档。</p>
-        </div>
-
-        <aside class="sidebar">
-          <section class="side-panel" id="updates">
-            <div class="section-kicker">最近更新</div>
-            <div id="recent-list" class="recent-list"></div>
-          </section>
-
-          <section class="side-panel">
-            <div class="section-kicker">查看方式</div>
-            <div class="help-copy">
-              <p>直接点击文档卡片即可打开 PDF、Word 或在线页面。</p>
-              <p>搜索框可以帮助你快速缩小文档范围。</p>
-            </div>
-          </section>
-        </aside>
+        <article id="doc-card" class="doc-card single-doc-card"></article>
       </section>
     </main>
 

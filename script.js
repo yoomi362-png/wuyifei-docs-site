@@ -1,11 +1,7 @@
-const search = document.querySelector('#search');
-const docsList = document.querySelector('#docs-list');
 const summary = document.querySelector('#summary');
-const recentList = document.querySelector('#recent-list');
-const resultCount = document.querySelector('#result-count');
-const emptyState = document.querySelector('#empty-state');
+const docCard = document.querySelector('#doc-card');
 
-let docs = [];
+let documentData = null;
 
 function formatDate(value) {
   return new Date(value).toLocaleDateString('zh-CN', {
@@ -16,6 +12,7 @@ function formatDate(value) {
 }
 
 function getFileLabel(item) {
+  if (!item) return '';
   if (item.external) return '外部链接';
   const type = (item.fileType || '').toLowerCase();
   if (type === 'pdf') return 'PDF';
@@ -30,15 +27,14 @@ async function loadContent() {
   }
 
   const data = await response.json();
-  docs = data.docs || [];
+  documentData = data.document || null;
 }
 
-function buildSummary() {
-  const latestDate = docs.map((item) => item.updatedAt).sort().at(-1);
+function renderSummary() {
   const items = [
-    { label: '文档数量', value: docs.length },
-    { label: '文件类型', value: [...new Set(docs.map((item) => getFileLabel(item)))].length },
-    { label: '最近更新', value: latestDate ? formatDate(latestDate) : '暂无' },
+    { label: '文档数量', value: documentData ? 1 : 0 },
+    { label: '类型', value: documentData ? getFileLabel(documentData) : '暂无' },
+    { label: '最近更新', value: documentData ? formatDate(documentData.updatedAt) : '暂无' },
   ];
 
   summary.innerHTML = items
@@ -53,67 +49,34 @@ function buildSummary() {
     .join('');
 }
 
-function buildRecentList() {
-  const recent = [...docs]
-    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .slice(0, 5);
+function renderDoc() {
+  if (!documentData) {
+    docCard.innerHTML = '<p class="empty-state">当前还没有上传文档。</p>';
+    return;
+  }
 
-  recentList.innerHTML = recent
-    .map(
-      (item) => `
-        <a class="recent-card" href="${item.href}" target="${item.external ? '_blank' : '_self'}" rel="noreferrer">
-          <span>${getFileLabel(item)}</span>
-          <strong>${item.title}</strong>
-          <small>${formatDate(item.updatedAt)}</small>
-        </a>
-      `
-    )
-    .join('');
-}
-
-function getFilteredDocs() {
-  const term = search.value.trim().toLowerCase();
-  return docs.filter((item) => {
-    const haystack = [item.title, item.description, ...(item.tags || [])].join(' ').toLowerCase();
-    return !term || haystack.includes(term);
-  });
-}
-
-function render() {
-  const filtered = getFilteredDocs().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  resultCount.textContent = `共 ${filtered.length} 篇`;
-  emptyState.hidden = filtered.length > 0;
-
-  docsList.innerHTML = filtered
-    .map(
-      (item) => `
-        <article class="doc-card">
-          <div class="doc-top">
-            <span class="doc-badge">${getFileLabel(item)}</span>
-            <time datetime="${item.updatedAt}">${formatDate(item.updatedAt)}</time>
-          </div>
-          <h3>${item.title}</h3>
-          <p>${item.description}</p>
-          <div class="tag-row">
-            ${(item.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join('')}
-          </div>
-          <a class="doc-link" href="${item.href}" target="${item.external ? '_blank' : '_self'}" rel="noreferrer">
-            ${item.fileType === 'pdf' ? '打开 PDF' : item.fileType === 'doc' || item.fileType === 'docx' ? '下载 Word 文档' : item.external ? '打开链接' : '查看文档'}
-          </a>
-        </article>
-      `
-    )
-    .join('');
+  docCard.innerHTML = `
+    <div class="doc-top">
+      <span class="doc-badge">${getFileLabel(documentData)}</span>
+      <time datetime="${documentData.updatedAt}">${formatDate(documentData.updatedAt)}</time>
+    </div>
+    <h3>${documentData.title}</h3>
+    <p>${documentData.description}</p>
+    <div class="tag-row">
+      ${(documentData.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join('')}
+    </div>
+    <a class="doc-link" href="${documentData.href}" target="${documentData.external ? '_blank' : '_self'}" rel="noreferrer">
+      ${documentData.fileType === 'pdf' ? '打开 PDF' : documentData.fileType === 'doc' || documentData.fileType === 'docx' ? '下载 Word 文档' : documentData.external ? '打开链接' : '查看文档'}
+    </a>
+  `;
 }
 
 loadContent()
   .then(() => {
-    buildSummary();
-    buildRecentList();
-    render();
+    renderSummary();
+    renderDoc();
   })
   .catch(() => {
-    docsList.innerHTML = '<p class="empty-state">内容暂时无法加载，请稍后再试。</p>';
+    summary.innerHTML = '';
+    docCard.innerHTML = '<p class="empty-state">内容暂时无法加载，请稍后再试。</p>';
   });
-
-search.addEventListener('input', render);

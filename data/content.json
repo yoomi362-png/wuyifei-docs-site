@@ -1,38 +1,12 @@
 {
-  "docs": [
-    {
-      "title": "网络跳跃教程",
-      "description": "已上传的 PDF 文档，访客可以直接打开查看。",
-      "href": "./docs/网络跳跃教程.pdf",
-      "updatedAt": "2026-06-23",
-      "tags": [
-        "PDF"
-      ],
-      "external": false,
-      "fileType": "pdf"
-    },
-    {
-      "title": "站点使用说明",
-      "description": "介绍文档中心如何浏览、搜索和查看内容。",
-      "href": "./docs/site-guide.html",
-      "updatedAt": "2026-06-23",
-      "tags": [
-        "说明"
-      ],
-      "external": false,
-      "fileType": "html"
-    },
-    {
-      "title": "文档中心说明",
-      "description": "说明如何通过搜索和最近更新快速定位资料。",
-      "href": "./docs/center-guide.html",
-      "updatedAt": "2026-06-23",
-      "tags": [
-        "浏览",
-        "检索"
-      ],
-      "external": false,
-      "fileType": "html"
-    }
-  ]
+  "document": {
+    "title": "网络跳跃教程",
+    "description": "当前站点唯一公开文档，访客可以直接在线查看或下载。",
+    "href": "./docs/网络跳跃教程.pdf",
+    "updatedAt": "2026-06-23",
+    "tags": ["PDF"],
+    "external": false,
+    "fileType": "pdf",
+    "filePath": "docs/网络跳跃教程.pdf"
+  }
 }

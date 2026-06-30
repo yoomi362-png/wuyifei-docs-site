@@ -119,8 +119,14 @@ button {
   gap: 22px;
 }
 
-.hero {
-  padding: 20px 0 18px;
+.single-page {
+  padding: 18px 0 28px;
+}
+
+.single-hero,
+.single-doc-area {
+  display: grid;
+  gap: 22px;
 }
 
 .hero-copy,
@@ -213,14 +219,9 @@ button {
 }
 
 .summary-grid,
-.docs-main,
-.docs-list,
-.category-block,
-.sidebar,
-.recent-list,
 .admin-list {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .summary-card,
@@ -250,29 +251,22 @@ button {
 }
 
 .toolbar-head,
-.section-head,
-.strip-head {
+.section-head {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 16px;
 }
 
-.section-head.compact {
-  align-items: start;
-}
-
 .toolbar h2,
-.section-head h2,
-.strip-head h2 {
+.section-head h2 {
   margin: 0;
   font-size: clamp(26px, 4vw, 34px);
 }
 
 .search-row input,
 .field input,
-.field textarea,
-.field select {
+.field textarea {
   width: 100%;
   min-height: 48px;
   padding: 12px 16px;
@@ -287,63 +281,17 @@ button {
   resize: vertical;
 }
 
-.chips {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.docs-layout.single,
+.admin-grid.single-admin {
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
 }
 
-.chip {
-  min-height: 38px;
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--panel-strong);
-  color: var(--text);
-  cursor: pointer;
-}
-
-.chip.active {
-  background: var(--accent-deep);
-  border-color: var(--accent-deep);
-  color: #fff8ef;
-}
-
-.category-strip {
-  margin: 20px 0;
-}
-
-.overview-grid,
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.overview-card,
 .doc-card {
   border-radius: 18px;
 }
 
-.overview-card {
-  cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease;
-}
-
-.overview-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-}
-
-.overview-name {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.overview-desc {
-  margin: 8px 0 16px;
-  line-height: 1.6;
+.single-doc-card {
+  margin-top: 14px;
 }
 
 .doc-top {
@@ -366,8 +314,11 @@ button {
   font-size: 12px;
 }
 
-.tag.strong {
-  font-weight: 700;
+.tag-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
 }
 
 .doc-card h3 {
@@ -379,13 +330,6 @@ button {
 .doc-card p {
   margin: 0;
   line-height: 1.7;
-}
-
-.tag-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 16px;
 }
 
 .doc-link {
@@ -419,11 +363,6 @@ button {
   padding-bottom: 28px;
 }
 
-.docs-layout.single,
-.admin-grid.single-admin {
-  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
-}
-
 .upload-section {
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
 }
@@ -450,8 +389,8 @@ button {
   .docs-layout,
   .admin-grid,
   .upload-section,
-  .overview-grid,
-  .card-grid {
+  .docs-layout.single,
+  .admin-grid.single-admin {
     grid-template-columns: 1fr;
   }
 }
@@ -459,8 +398,7 @@ button {
 @media (max-width: 720px) {
   .topbar,
   .toolbar-head,
-  .section-head,
-  .strip-head {
+  .section-head {
     display: grid;
     gap: 12px;
   }

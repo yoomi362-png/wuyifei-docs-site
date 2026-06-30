@@ -1,20 +1,20 @@
 # wuyifei.xyz 文档中心
 
-这是一个部署在 GitHub Pages 上的静态文档中心，包含公开前台和管理员上传后台。
+这是一个部署在 GitHub Pages 上的单文档站点，前台只展示“网络跳跃教程”。
 
 ## 页面
 
 - `index.html`：访客访问的文档中心首页
 - `admin.html`：管理员后台
-- `data/content.json`：文档列表数据
-- `uploads/`：后台上传的 PDF / Word 文件会放在这里
+- `data/content.json`：当前公开文档的数据
+- `docs/网络跳跃教程.pdf`：当前公开文档文件
 
 ## 管理方式
 
 管理员打开 `admin.html` 后，可以：
 
 - 连接 GitHub 仓库
-- 上传 PDF / Word 文档
+- 上传 PDF / Word 文档并覆盖当前文档
 - 录入外部文档链接
 - 自动更新 `data/content.json`
 
@@ -31,7 +31,5 @@ Token 只保存在浏览器当前会话中，不写入仓库文件。
 
 前台首页只负责：
 
-- 文档搜索
-- 最近更新
-- 展示管理员已上传的文档
+- 展示唯一公开文档
 - 打开 PDF、Word 或站内文档

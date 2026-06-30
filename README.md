@@ -1,10 +1,12 @@
 # wuyifei.xyz 文档中心
 
+访问地址: https://wuyifei.xyz
+
 这是一个部署在 GitHub Pages 上的单文档站点，前台只展示“网络跳跃教程”。
 
 ## 页面
 
-- `index.html`：访客访问的文档中心首页
+- `index.html`：访客访问的首页
 - `admin.html`：管理员后台
 - `data/content.json`：当前公开文档的数据
 - `docs/网络跳跃教程.pdf`：当前公开文档文件

@@ -1,4 +1,3 @@
-const summary = document.querySelector('#summary');
 const docCard = document.querySelector('#doc-card');
 
 let documentData = null;
@@ -13,11 +12,11 @@ function formatDate(value) {
 
 function getFileLabel(item) {
   if (!item) return '';
-  if (item.external) return '外部链接';
+  if (item.external) return 'External link';
   const type = (item.fileType || '').toLowerCase();
   if (type === 'pdf') return 'PDF';
   if (type === 'doc' || type === 'docx') return 'Word';
-  return '文档';
+  return 'Document';
 }
 
 async function loadContent() {
@@ -30,53 +29,27 @@ async function loadContent() {
   documentData = data.document || null;
 }
 
-function renderSummary() {
-  const items = [
-    { label: '文档数量', value: documentData ? 1 : 0 },
-    { label: '类型', value: documentData ? getFileLabel(documentData) : '暂无' },
-    { label: '最近更新', value: documentData ? formatDate(documentData.updatedAt) : '暂无' },
-  ];
-
-  summary.innerHTML = items
-    .map(
-      (item) => `
-        <article class="summary-card">
-          <strong>${item.value}</strong>
-          <span>${item.label}</span>
-        </article>
-      `
-    )
-    .join('');
-}
-
 function renderDoc() {
   if (!documentData) {
-    docCard.innerHTML = '<p class="empty-state">当前还没有上传文档。</p>';
+    docCard.innerHTML = '<p class="empty-state">No public document yet.</p>';
     return;
   }
 
   docCard.innerHTML = `
-    <div class="doc-top">
-      <span class="doc-badge">${getFileLabel(documentData)}</span>
+    <div class="mini-top">
+      <span class="chip">${getFileLabel(documentData)}</span>
       <time datetime="${documentData.updatedAt}">${formatDate(documentData.updatedAt)}</time>
     </div>
     <h3>${documentData.title}</h3>
     <p>${documentData.description}</p>
-    <div class="tag-row">
-      ${(documentData.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join('')}
-    </div>
     <a class="doc-link" href="${documentData.href}" target="${documentData.external ? '_blank' : '_self'}" rel="noreferrer">
-      ${documentData.fileType === 'pdf' ? '打开 PDF' : documentData.fileType === 'doc' || documentData.fileType === 'docx' ? '下载 Word 文档' : documentData.external ? '打开链接' : '查看文档'}
+      ${documentData.fileType === 'pdf' ? 'Open PDF' : documentData.fileType === 'doc' || documentData.fileType === 'docx' ? 'Download Word' : documentData.external ? 'Open link' : 'View document'}
     </a>
   `;
 }
 
 loadContent()
-  .then(() => {
-    renderSummary();
-    renderDoc();
-  })
+  .then(renderDoc)
   .catch(() => {
-    summary.innerHTML = '';
-    docCard.innerHTML = '<p class="empty-state">内容暂时无法加载，请稍后再试。</p>';
+    docCard.innerHTML = '<p class="empty-state">Content is temporarily unavailable.</p>';
   });

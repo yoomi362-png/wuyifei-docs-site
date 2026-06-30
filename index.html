@@ -3,40 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="wuyifei.xyz 仅展示一份公开文档：网络跳跃教程。"
-    />
+    <meta name="description" content="wuyifei.xyz 单文档展示页，访问后直接进入网络跳跃教程。" />
     <title>wuyifei.xyz | 网络跳跃教程</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="shell single-page">
-      <section class="hero single-hero">
-        <div class="hero-copy">
-          <p class="eyebrow">公开文档</p>
+    <main class="page-shell">
+      <header class="topbar compact">
+        <div class="brand brand-light">
+          <div class="mark mark-light">W</div>
+          <div>
+            <div class="name">wuyifei.xyz</div>
+            <div class="sub">Document</div>
+          </div>
+        </div>
+        <a class="text-link" href="./admin.html">Admin</a>
+      </header>
+
+      <section class="hero minimal">
+        <div class="hero-copy minimal-copy">
+          <p class="eyebrow">Featured document</p>
           <h1>网络跳跃教程</h1>
           <p class="lead">
-            这是网站唯一公开展示的文档。点击下面的按钮即可查看 PDF。
+            A single public document site for direct reading and download.
           </p>
           <div class="cta-row">
-            <a class="button primary" href="./docs/网络跳跃教程.pdf">打开文档</a>
-            <a class="button ghost" href="./admin.html">管理员后台</a>
+            <a class="button primary" href="./docs/网络跳跃教程.pdf">Open PDF</a>
           </div>
         </div>
 
-        <aside class="hero-panel">
-          <div class="panel-title">文档信息</div>
-          <div id="summary" class="summary-grid"></div>
-        </aside>
+        <div class="hero-panel minimal-panel">
+          <div class="mini-label">Document</div>
+          <article id="doc-card" class="mini-card"></article>
+        </div>
       </section>
 
-      <section class="single-doc-area">
-        <div class="section-head">
-          <p class="section-kicker">当前文档</p>
-          <h2>查看当前公开内容</h2>
+      <section class="preview-band">
+        <div class="section-head compact">
+          <p class="section-kicker">Preview</p>
+          <h2>Quick access</h2>
         </div>
-        <article id="doc-card" class="doc-card single-doc-card"></article>
+        <div class="preview-grid">
+          <a class="preview-tile active" href="./docs/网络跳跃教程.pdf">
+            <span>PDF</span>
+            <strong>网络跳跃教程</strong>
+          </a>
+          <div class="preview-tile muted">
+            <span>Updated</span>
+            <strong>2026-06-23</strong>
+          </div>
+        </div>
       </section>
     </main>
 

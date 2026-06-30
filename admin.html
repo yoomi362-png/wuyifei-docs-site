@@ -7,23 +7,21 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark">A</div>
+    <header class="topbar compact">
+      <div class="brand brand-light">
+        <div class="mark mark-light">A</div>
         <div>
-          <div class="name">文档上传后台</div>
-          <div class="sub">只保留当前这一份文档</div>
+          <div class="name">文档后台</div>
+          <div class="sub">Upload only</div>
         </div>
       </div>
-      <nav class="nav">
-        <a href="./index.html">返回前台</a>
-      </nav>
+      <a class="text-link" href="./index.html">Back</a>
     </header>
 
     <main class="shell admin-shell">
       <section class="admin-grid single-admin">
         <section class="side-panel">
-          <div class="section-kicker">GitHub 连接</div>
+          <div class="section-kicker">GitHub</div>
           <div class="field">
             <label for="token">GitHub Token</label>
             <input id="token" type="password" placeholder="输入具有 repo 权限的 token" />
@@ -42,35 +40,35 @@
             <label for="branch">Branch</label>
             <input id="branch" type="text" value="main" />
           </div>
-          <button id="connect-btn" class="button primary full">连接仓库并读取数据</button>
+          <button id="connect-btn" class="button primary full">Connect repo</button>
           <p id="status" class="status-note">Token 只保存在当前浏览器会话，不写入页面文件。</p>
         </section>
       </section>
 
       <section class="admin-grid upload-section">
         <section class="side-panel">
-          <div class="section-kicker">替换文档</div>
+          <div class="section-kicker">Document</div>
           <div class="field">
-            <label for="doc-title">标题</label>
+            <label for="doc-title">Title</label>
             <input id="doc-title" type="text" value="网络跳跃教程" />
           </div>
           <div class="field">
-            <label for="doc-description">摘要</label>
-            <textarea id="doc-description" rows="4" placeholder="简短说明这份文档是什么"></textarea>
+            <label for="doc-description">Summary</label>
+            <textarea id="doc-description" rows="4" placeholder="Short description"></textarea>
           </div>
           <div class="field">
-            <label for="doc-file">上传 PDF / Word</label>
+            <label for="doc-file">Upload PDF / Word</label>
             <input id="doc-file" type="file" accept=".pdf,.doc,.docx,application/pdf,.doc,.docx" />
           </div>
           <div class="field">
-            <label for="doc-url">或使用外部链接</label>
+            <label for="doc-url">Or external link</label>
             <input id="doc-url" type="url" placeholder="https://..." />
           </div>
-          <button id="publish-btn" class="button primary full">发布并覆盖当前文档</button>
+          <button id="publish-btn" class="button primary full">Publish</button>
         </section>
 
         <section class="side-panel">
-          <div class="section-kicker">当前文档</div>
+          <div class="section-kicker">Current</div>
           <div id="doc-admin-list" class="admin-list"></div>
         </section>
       </section>

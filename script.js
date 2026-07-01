@@ -1,4 +1,11 @@
 const docCard = document.querySelector('#doc-card');
+const pageTitle = document.querySelector('#page-title');
+const heroKicker = document.querySelector('#hero-kicker');
+const heroCopy = document.querySelector('#hero-copy');
+const heroActions = document.querySelector('#hero-actions');
+const heroMeta = document.querySelector('#hero-meta');
+const statusKicker = document.querySelector('#status-kicker');
+const statusTitle = document.querySelector('#status-title');
 let documentData = null;
 
 function formatDate(value) {
@@ -32,9 +39,40 @@ function renderDoc() {
   if (!docCard) return;
 
   if (!documentData) {
-    docCard.innerHTML = '<p class="empty-state">No public document yet.</p>';
+    document.body.classList.add('is-empty');
+    docCard.innerHTML = `
+      <div class="document-card-top">
+        <span>Empty</span>
+        <span>wuyifei.xyz</span>
+      </div>
+      <h3>暂无文档</h3>
+      <p>文档已从站点移除。管理员上传新文件后，前台会重新显示文档入口。</p>
+      <a class="document-link" href="./admin.html">进入后台</a>
+    `;
     return;
   }
+
+  document.body.classList.remove('is-empty');
+  document.title = `wuyifei.xyz | ${documentData.title}`;
+  if (pageTitle) pageTitle.textContent = documentData.title;
+  if (heroKicker) heroKicker.textContent = 'PUBLIC DOCUMENT';
+  if (heroCopy) heroCopy.textContent = documentData.description;
+  if (heroActions) {
+    heroActions.innerHTML = `
+      <a class="button button-light" href="${documentData.href}" target="${documentData.external ? '_blank' : '_self'}" rel="noreferrer">
+        ${documentData.fileType === 'pdf' ? '打开 PDF' : documentData.fileType === 'doc' || documentData.fileType === 'docx' ? '下载 Word' : documentData.external ? '打开链接' : '查看文档'}
+      </a>
+    `;
+  }
+  if (heroMeta) {
+    heroMeta.innerHTML = `
+      <span>${getFileLabel(documentData)}</span>
+      <span>Updated ${formatDate(documentData.updatedAt)}</span>
+      <span>wuyifei.xyz</span>
+    `;
+  }
+  if (statusKicker) statusKicker.textContent = 'Document';
+  if (statusTitle) statusTitle.textContent = '当前公开内容。';
 
   docCard.innerHTML = `
     <div class="document-card-top">

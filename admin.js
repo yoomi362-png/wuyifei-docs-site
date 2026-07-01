@@ -184,7 +184,7 @@ async function connect() {
 }
 
 async function publishDoc() {
-  const title = elements.docTitle.value.trim() || '网络跳跃教程';
+  const title = elements.docTitle.value.trim() || '未命名文档';
   const description = elements.docDescription.value.trim() || '当前站点唯一公开文档，访客可以直接在线查看或下载。';
   const file = elements.docFile.files[0];
   const url = elements.docUrl.value.trim();
@@ -200,7 +200,7 @@ async function publishDoc() {
   let href = url;
   let external = Boolean(url);
   let fileType = 'link';
-  let filePath = previousPath || 'docs/网络跳跃教程.pdf';
+  let filePath = previousPath || '';
 
   if (file) {
     fileType = getFileType(file.name);

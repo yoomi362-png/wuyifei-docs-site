@@ -169,11 +169,23 @@ textarea {
   border-radius: 6px;
   background:
     linear-gradient(rgba(23, 11, 9, 0.08), rgba(23, 11, 9, 0.58)),
-    url("./assets/网络跳跃教程.pdf.png") center top / cover no-repeat,
     linear-gradient(135deg, #f7efe2, #d4c2a3);
   box-shadow: 0 44px 90px rgba(0, 0, 0, 0.36);
   opacity: 0.9;
   transform: translateY(calc(var(--scroll-progress) * -28px));
+}
+
+.is-empty .law-hero::after {
+  content: "No document";
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 240, 0.92), rgba(201, 174, 121, 0.24)),
+    linear-gradient(135deg, #f7efe2, #d4c2a3);
+  color: rgba(23, 11, 9, 0.48);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 5vw, 72px);
+  text-align: center;
 }
 
 .hero-shade {
@@ -453,6 +465,20 @@ textarea {
   background:
     linear-gradient(rgba(245, 242, 234, 0.88), rgba(245, 242, 234, 0.98)),
     radial-gradient(circle at center, rgba(201, 174, 121, 0.34), transparent 34%);
+}
+
+.empty-intro {
+  padding-bottom: 112px;
+}
+
+.empty-card {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.empty-card .document-card-top,
+.empty-card p {
+  color: var(--muted);
 }
 
 .closing-section h2 {

@@ -1,12 +1,3 @@
 {
-  "document": {
-    "title": "网络跳跃教程",
-    "description": "当前站点唯一公开文档，访客可以直接在线查看或下载。",
-    "href": "./docs/网络跳跃教程.pdf",
-    "updatedAt": "2026-06-23",
-    "tags": ["PDF"],
-    "external": false,
-    "fileType": "pdf",
-    "filePath": "docs/网络跳跃教程.pdf"
-  }
+  "document": null
 }
